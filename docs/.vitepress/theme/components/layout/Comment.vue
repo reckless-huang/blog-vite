@@ -27,8 +27,8 @@
   let gitalk;
   if (type.value && type.value == 'gitalk') {
     gitalk = new Gitalk({
-      clientID: 'Ov23lizi07bA6XulyJEl',
-      clientSecret: '87c49ba64788daa6c21f17a6d74bef3f7c67b3ac',
+      clientID: 'Ov23liTj6OkJDWCn8lbJ',
+      clientSecret: 'f18298c800311876638af4c81c2317e6af8f0f01',
       repo: 'blog-vite',
       owner: 'reckless-huang',
       admin: ['reckless-huang'],
