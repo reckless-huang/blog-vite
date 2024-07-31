@@ -16,7 +16,7 @@ hero:
       text: 快速开始
       link: /categories/kubernetes/index
     - theme: alt
-      text: 看看我的平台demo1
+      text: 看看我的平台demo2
       link: https://ops.gostatus.cn
 
 features:
