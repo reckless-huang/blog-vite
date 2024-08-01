@@ -25,6 +25,7 @@
   // 初始化评论组件配置
   const { page } = useData();
   let gitalk;
+  console.log(page.value.relativePath)
   if (type.value && type.value == 'gitalk') {
     gitalk = new Gitalk({
       clientID: 'Ov23li42soMopgRgAIn2',
