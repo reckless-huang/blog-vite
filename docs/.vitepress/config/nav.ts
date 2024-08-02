@@ -6,6 +6,7 @@ export const nav: DefaultTheme.Config['nav'] = [
     items: [
       { text: 'Kubernetes', link: '/categories/kubernetes/index', activeMatch: '/categories/kubernetes/' },
       { text: 'Linux', link: '/categories/linux/index', activeMatch: '/categories/linux/' },
+      { text: 'Others', link: '/categories/others/index', activeMatch: '/categories/others/' }
     ],
     activeMatch: '/categories/'
   },

@@ -6,6 +6,8 @@ export const algoliaSearchOptions: AlgoliaSearchOptions = {
   indexName: 'myblog',
   locales: {
     root: {
+      label: '简体中文',
+      lang: 'zh-CN',
       placeholder: '搜索文档',
       translations: {
         button: {
