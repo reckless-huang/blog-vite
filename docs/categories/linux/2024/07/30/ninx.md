@@ -12,9 +12,5 @@ tags:
 ---
 
 # nginx启动原理-07-30
+内容匹配失败
 
-## yufeng-nginx
-nginx
-yufeng
-lalallala
-sos
