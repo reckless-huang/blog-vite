@@ -22,4 +22,4 @@ tags:
   ……
 
 ## 如何开始搭建
-1. 浏览官方文档[vitepress](https://vitepress.dev/zh/guide/getting-started)
+aaaaaa
