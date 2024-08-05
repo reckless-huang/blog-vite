@@ -11,7 +11,6 @@ tags:
  - cloudflare
  - github
  - vitepress
- - cdn
 ---
 # 这个博客是怎么搭建的
 ## 为什么选择vitepress
