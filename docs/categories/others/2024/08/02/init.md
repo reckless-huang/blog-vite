@@ -13,6 +13,7 @@ tags:
  - vitepress
 ---
 # 这个博客是怎么搭建的
+<!-- more -->
 ## 为什么选择vitepress
 - 区别于传统的b/s架构，vuepress，vitepress部署更简单，使用更方便，**即刻开始**不给自己任何借口。
 
