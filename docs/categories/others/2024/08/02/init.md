@@ -50,7 +50,3 @@ pnpm run docs:dev
 1. 关闭cloudflare缓存，查看是否是cloudflare缓存导致的问题
 2. 本地清除缓存，查看是否是本地缓存导致的问题
 ### 如果想有一个博客，那就现在开始吧，有疑问欢迎留言。
-### 参考资料（侵删）
-1. [vitepress官方文档](https://vitepress.dev/zh/guide/getting-started)
-2. [charles7c](https://github.com/Charles7c/charles7c.github.io)
-3. [恢复unpublish的文章](https://blog.csdn.net/weixin_46143152/article/details/129046623)
