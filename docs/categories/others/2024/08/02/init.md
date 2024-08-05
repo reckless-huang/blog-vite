@@ -18,9 +18,6 @@ tags:
 
 - vitepress是vuepress的升级版，同时也是vue3doc的底座，我个人技术栈中有vue3，所以选择vitepress，另外我也推荐您使用vitepress，他的生态更好，社区更活跃。
 
-
-  ……
-
 ## 前言
 
 ### 为什么要进行限流？
