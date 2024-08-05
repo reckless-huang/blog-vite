@@ -20,3 +20,21 @@ tags:
 
 
   ……
+
+## 如何开始搭建
+1. 浏览官方文档[vitepress](https://vitepress.dev/zh/guide/getting-started)
+2. 本地跑起来，看看效果
+```shell
+# 安装node（需要18.0以上版本）
+# 安装vitepress
+npm install pnpm -g
+pnpm config set registry https://registry.npmmirror.com/
+pnpm add -D vitepress
+# 初始化项目
+pnpm vitepress init
+# 运行
+pnpm run docs:dev
+```
+3. 上面是官网的方式，了解过后我更推荐您使用一些社区的模板，我使用的是[charles7c](https://github.com/Charles7c/charles7c.github.io),一个很棒的模板，您可以直接fork过来，然后修改成自己的博客。
+4. 部署到github pages
+5. 使用cloudflare加速
