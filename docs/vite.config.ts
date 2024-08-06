@@ -10,7 +10,6 @@ export default defineConfig({
       resolvers: [ArcoResolver({ sideEffect: true, resolveIcons: true })]
     }),
   ],
-  cleanUrls: true,
   ssr: { noExternal: ['@arco-design/web-vue'] },
   resolve: {
     alias: {
