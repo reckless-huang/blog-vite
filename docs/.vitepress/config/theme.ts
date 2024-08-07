@@ -73,11 +73,6 @@ export const themeConfig: DefaultTheme.Config = {
     license: '署名-相同方式共享 4.0 国际 (CC BY-SA 4.0)',
     licenseLink: 'http://creativecommons.org/licenses/by-sa/4.0/'
   },
-  // 自定义扩展: 评论配置
-  commentConfig: {
-    type: 'gitalk',
-    showComment: true // 是否显示评论
-  },
   // 自定义扩展: 页脚配置
   footerConfig: {
     showFooter: true, // 是否显示页脚
