@@ -9,6 +9,7 @@ export const sidebar: DefaultTheme.Config['sidebar'] = {
     '/categories/kubernetes/': getItemsByDate("categories/kubernetes"),
     '/categories/linux/': getItemsByDate("categories/linux"),
     '/categories/others/': getItemsByDate("categories/others"),
+    '/categories/devops/': getItemsByDate("categories/devops"),
 
     // '/courses/java/': getItems("courses/java"),
     // '/courses/mysql/': getItems("courses/mysql"),
