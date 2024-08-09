@@ -21,4 +21,6 @@ django中的orm是一个非常强大的工具，但是在使用的过程中，�
 ### values和values_list
 ## 减少查询次数
 ### select_related和prefetch_related
-
+## 参考文章
+- [Django ORM优化](https://docs.djangoproject.com/zh-hans/5.0/topics/db/optimization/)
+- [全职技术开发外包2023年终复盘（五）django查询优化手段及减少代码运算](https://mp.weixin.qq.com/s/4cFgA0i85k_sit6-OL0chw)
