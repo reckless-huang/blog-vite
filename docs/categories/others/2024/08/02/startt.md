@@ -118,8 +118,10 @@ jobs:
 - **排查缓存问题**
 1. 关闭cloudflare缓存，查看是否是cloudflare缓存导致的问题
 2. 本地清除缓存，查看是否是本地缓存导致的问题
+3. lean.js(优化的js不包含内容所以导致页面内容空) 最终导致了这个问题，但是我没有找到解决办法，只能等待他们修复。
 ### 如果想有一个博客，那就现在开始吧，有疑问欢迎留言。
 ### 参考资料（侵删）
 1. [vitepress官方文档](https://vitepress.dev/zh/guide/getting-started)
 2. [charles7c](https://github.com/Charles7c/charles7c.github.io)
 3. [恢复unpublish的文章](https://blog.csdn.net/weixin_46143152/article/details/129046623)
+4. [gitcus](https://qiuliw.github.io/categories/issues/2024/6/19/vitepress%E5%90%AF%E7%94%A8giscus)
