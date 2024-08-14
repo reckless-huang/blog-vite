@@ -13,6 +13,6 @@ tags:
 - 记录了Kubernetes官博中的一些信息，包括Kubernetes的一些新特性、迭代计划等。
 - 选择版本时，可以参考这里的信息。
 ## Kubernetes 全球第二大开源项目
-![img.png](../../../../../public/img/20240814-1.png)
+![img.png](../../public/img/20240814-1.png)
 ## 迭代计划
 自新冠疫情爆发后，Kubernetes社区从每年**四次**发布迭代计划调整为每年**三次**发布迭代计划。
