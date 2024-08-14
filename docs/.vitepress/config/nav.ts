@@ -11,13 +11,13 @@ export const nav: DefaultTheme.Config['nav'] = [
     ],
     activeMatch: '/categories/'
   },
-  // {
-  //   text: '我的小册',
-  //   items: [
-  //     { text: 'MyBatis快速入门', link: '/courses/mybatis/index', activeMatch: '/courses/mybatis/' }
-  //   ],
-  //   activeMatch: '/courses/'
-  // },
+  {
+    text: '我的小册',
+    items: [
+      { text: 'Kubernetes官博', link: '/courses/kubernetes/index', activeMatch: '/courses/kubernetes/' }
+    ],
+    activeMatch: '/courses/'
+  },
   {
     text: '我的标签',
     link: '/tags',
