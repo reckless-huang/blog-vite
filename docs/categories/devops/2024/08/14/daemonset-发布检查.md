@@ -48,6 +48,7 @@ revision: 18
 ```
 可以获取到关键的**revision**和**controller-revision-hash**，借此查询到对应的pod信息。
 ## 代码实例（python）
+- 补充判断条件，需要判断当前daemonset的副本数是否为0，如果为0则不需要检查pod状态
 ```python
    def check_daemonset_ready(self, name, namespace):
         print(f"check_daemonset_ready {name} {namespace}")
