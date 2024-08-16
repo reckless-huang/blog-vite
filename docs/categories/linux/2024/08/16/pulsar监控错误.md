@@ -33,3 +33,5 @@ grep -axv '.*' FILE
 - 监控告警应当区分endpoint down的情况
 - 业务工程的订阅者名称不要使用中文
 - pod shell环境可能对中文支持不好
+## 参考文章
+- [如何从文件中删除非UTF-8字符](https://www.itcodingman.com/remove_non_utf_8_characters/)
