@@ -7,7 +7,7 @@ titleTemplate: 个人技术知识库
 hero:
   name: 宇峰的知识库
   text: null
-  tagline: 把我做的记录下来，回顾总结
+  tagline: 踏上取经路，比抵达灵山更重要
   image:
     src: /golang.png
     alt: VitePress
