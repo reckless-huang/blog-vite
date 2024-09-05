@@ -8,36 +8,17 @@ tags: [tcp, udp]
 ::: tip
 talk is cheap, show me the code
 :::
-server.go
+udpserver.go
 ```golang
 package main
 
 import (
 	"fmt"
 	"net"
-	"net/http"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	// 处理请求
-	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
-}
-
 func main() {
-	// 可以同时监听TCP和UDP么？
-	// 1. 创建一个TCP服务
-	http.HandleFunc("/", handler)
-	go func() {
-		fmt.Println("http server listening")
-		err := http.ListenAndServe(":8080", nil)
-		if err != nil {
-			fmt.Println("http.ListenAndServe err:", err)
-		}
-	}()
-	// 2. 创建一个UDP服务
-
 	udpServer()
-
 }
 
 func udpServer() {
@@ -64,6 +45,29 @@ func udpServer() {
 			fmt.Println("Write to udp failed, err: ", err)
 			continue
 		}
+	}
+}
+```
+tcpserver.go
+```golang
+package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	// 处理请求
+	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
+}
+
+func main() {
+	http.HandleFunc("/", handler)
+	fmt.Println("http server listening")
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		fmt.Println("http.ListenAndServe err:", err)
 	}
 }
 ```
@@ -103,14 +107,17 @@ func main() {
 }
 ```
 ## 测试
-1. 运行server.go
+1. 运行udpserver.go
 ```
-http server listening
 udp server listening
 data:%v addr:%v count:%v
- Hello Server 127.0.0.1:63441 12
+ Hello Server 127.0.0.1:63581 12
 ```
-2. 运行client.go
+2. 运行tcpserver.go
+```
+http server listening
+```
+3. 运行client.go
 ```
 recv:Hello Server addr:127.0.0.1:8080 count:12
 ```
