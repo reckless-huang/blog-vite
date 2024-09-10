@@ -27,6 +27,23 @@ only和defer是两个方法，可以让我们只查询我们需要的字段，�
 
 需要注意的是，select_related只能用于外键和一对一字段，而prefetch_related一般用于多对多和多对一字段。
 
+### annotate    
+使用annotate可以在查询时，提前查询某些关联字段，并保存到查询结果中，这样可以减少查询次数。   
+```python
+    # 使用annotate提前查询fatherversion__name字段
+    queryset = Version.objects.all().order_by('-pk').annotate(father_name=F('fatherversion__name'))
+    
+    # 使用CharField
+    # fatherversion = serializers.SerializerMethodField()
+    fatherversion = serializers.CharField(source='father_name')
+
+    # def get_fatherversion(self, obj):
+    #     if fatherversion := obj.fatherversion:
+    #         return fatherversion.name
+    #     else:
+    #         return '无父节点'
+```
+
 ## 从代码中的运算中优化
 ### values和values_list
 values*使得orm在处理数据时，不会将数据转换为对象，而是直接返回字典（values_list返回元组），这样可以减少代码运算。
