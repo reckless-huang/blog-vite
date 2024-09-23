@@ -9,7 +9,7 @@ tags: [tcp, udp]
 talk is cheap, show me the code
 :::
 udpserver.go
-```golang
+```go
 package main
 
 import (
@@ -49,7 +49,7 @@ func udpServer() {
 }
 ```
 tcpserver.go
-```golang
+```go
 package main
 
 import (
@@ -72,7 +72,7 @@ func main() {
 }
 ```
 client.go
-```golang
+```go
 package main
 
 import (
