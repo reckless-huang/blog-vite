@@ -14,7 +14,8 @@ export const nav: DefaultTheme.Config['nav'] = [
   {
     text: '我的小册',
     items: [
-      { text: 'Kubernetes官博', link: '/courses/kubernetes/index', activeMatch: '/courses/kubernetes/' }
+      { text: 'Kubernetes官博', link: '/courses/kubernetes/index', activeMatch: '/courses/kubernetes/' },
+        { text: 'Golang学习笔记', link: '/courses/golang/index', activeMatch: '/courses/golang/' }
     ],
     activeMatch: '/courses/'
   },
