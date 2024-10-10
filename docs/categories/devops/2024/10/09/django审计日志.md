@@ -51,3 +51,126 @@ DJANGO_EASY_AUDIT_UNREGISTERED_CLASSES_EXTRA
 ```
 ## 可视化
 通过superset可以使用数据库中的数据进行可视化，数据源+dataset+dashboard+chart
+## 踩坑
+### 中间件不支持异步
+debug时会报错   
+django.core.exceptions.SynchronousOnlyOperation: You cannot call this from an async context - use a thread or sync_to_async.  
+参考这个pr改写中间件  
+1. Middleware 的修改
+   在这个 pull request 中，EasyAuditMiddleware 被修改为同时支持同步和异步操作。以下是主要的修改点：   
+   __init__ 方法：   
+        - get_response 参数现在有一个明确的类型提示，表明它是一个返回 HttpResponse 的函数。   
+        - 如果 get_response 是一个异步函数（通过 iscoroutinefunction 检查），则使用 markcoroutinefunction 将其标记为协程函数。   
+   __call__ 方法：   
+        - 修改了 __call__ 方法，以便根据 get_response 是否为异步函数来决定如何处理请求。   
+        - 如果 self 是一个异步函数，则调用新的 __acall__ 方法。  
+   新增 __acall__ 方法：  
+        - 这是一个异步版本的 __call__ 方法，用于处理异步请求。   
+        - 它使用 await 来等待 get_response 函数的结果。  
+2. 线程局部存储的修改
+   之前使用 threading.local() 来存储当前请求的信息，这在异步环境中不适用。   
+   现在使用 asgiref.local.Local()，这是一个适用于异步环境的本地存储。
+3. 处理请求和响应的方法
+   process_request 和 process_response 方法被修改，以确保它们能够处理异步请求。   
+   process_exception 方法保持不变，因为它通常不涉及异步操作。
+修改后的中间件代码如下：
+``` python
+# makes easy-audit thread-safe
+import contextlib
+from typing import Callable
+
+from asgiref.local import Local
+from asgiref.sync import iscoroutinefunction, markcoroutinefunction
+from django.http.request import HttpRequest
+from django.http.response import HttpResponse
+
+
+class MockRequest:
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop("user", None)
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+
+_thread_locals = Local()
+
+
+def get_current_request():
+    return getattr(_thread_locals, "request", None)
+
+
+def get_current_user():
+    request = get_current_request()
+    if request:
+        return getattr(request, "user", None)
+    return None
+
+
+def set_current_user(user):
+    try:
+        _thread_locals.request.user = user
+    except AttributeError:
+        request = MockRequest(user=user)
+        _thread_locals.request = request
+
+
+def clear_request():
+    with contextlib.suppress(AttributeError):
+        del _thread_locals.request
+
+
+class EasyAuditMiddleware:
+    async_capable = True
+    sync_capable = True
+
+    def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]) -> None:
+        self.get_response = get_response
+        if iscoroutinefunction(self.get_response):
+            markcoroutinefunction(self)
+
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        # print("2")
+        if iscoroutinefunction(self):
+            return self.__acall__(request)
+
+        _thread_locals.request = request
+        response = self.get_response(request)
+
+        with contextlib.suppress(AttributeError):
+            del _thread_locals.request
+
+        return response
+
+    async def __acall__(self, request: HttpRequest) -> HttpResponse:
+        # print("3")
+        _thread_locals.request = request
+
+        response = await self.get_response(request)
+
+        with contextlib.suppress(AttributeError):
+            del _thread_locals.request
+
+        return response
+```
+### 支持从jwt token获取用户，而不是默认的session
+默认的方法不能正确获取用户,修改request_signals.py
+``` python
+    user = None
+    user_id = None
+    # get the user from http auth
+    if not user_id:
+        headers = dict(scope.get('headers'))
+        try:
+            auth_string = headers.get(b'authorization')
+            if isinstance(auth_string, bytes):
+                auth_string = auth_string.decode("utf-8")
+            jwt_token = (
+                auth_string.split(" ")[1] if auth_string.startswith("JWT") else auth_string
+            )
+            jwt_token_decoded = jwt.decode(jwt_token, None, None)
+            user_id = jwt_token_decoded["user_id"]
+        except:
+            user_id = None
+```
+## 总结
+插件的整体思路就是信号量来触发不同的事件，然后记录到数据库中，这样就可以实现审计日志的功能。
