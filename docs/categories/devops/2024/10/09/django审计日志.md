@@ -172,5 +172,58 @@ class EasyAuditMiddleware:
         except:
             user_id = None
 ```
+### 修复登录日志
+默认不支持记录飞书等第三方登录的日志，修改login_signals.py, 主动发送信号量
+``` python
+class LocalJSONWebTokenSerializer(JSONWebTokenSerializer):
+    def validate(self, attrs):
+        credentials = {
+            self.username_field: attrs.get(self.username_field),
+            'password': attrs.get('password')
+        }
+
+        if all(credentials.values()):
+            user = authenticate(**credentials)
+
+            if user:
+                if not user.is_active:
+                    msg = _('User account is disabled.')
+                    raise serializers.ValidationError(msg)
+
+                payload = jwt_payload_handler(user)
+                signals.user_logged_in.send(sender=self.__class__, request=self.context['request'], user=user)
+                return {
+                    'token': jwt_encode_handler(payload),
+                    'user': user
+                }
+            else:
+                msg = _('Unable to log in with provided credentials.')
+                signals.user_login_failed.send(sender=self.__class__, credentials=credentials)
+                raise serializers.ValidationError(msg)
+        else:
+            signals.user_login_failed.send(sender=self.__class__, credentials=credentials)
+            msg = _('Must include "{username_field}" and "password".')
+            msg = msg.format(username_field=self.username_field)
+            raise serializers.ValidationError(msg)
+
+
+class LocalObtainJSONWebToken(ObtainJSONWebToken):
+    serializer_class = LocalJSONWebTokenSerializer
+
+
+oauth2_obtain_jwt_token = Oauth2JSONWebToken.as_view()
+local_obtain_jwt_token = LocalObtainJSONWebToken.as_view()
+```
+### 序列化数据错误
+默认对datetime字段序列化错误，会产生大量的错误日志，看issue发现目前还没解决，暂时先忽略错误   
+https://github.com/soynatan/django-easy-audit/issues/132
+``` python
+
+        try:
+            object_json_repr = serializers.serialize("json", [instance])
+            print(instance)
+        except Exception:
+            return False
+```
 ## 总结
 插件的整体思路就是信号量来触发不同的事件，然后记录到数据库中，这样就可以实现审计日志的功能。
