@@ -52,12 +52,15 @@ values*使得orm在处理数据时，不会将数据转换为对象，而是直�
 ### 开启debug日志打印sql
 在settings.py中设置
 ```python
+DEBUG = True
+LOGGING = {
         # 数据库日志
-        'django.db': {
+        'django.db.backends': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False
         },
+    }
 ```
 ### 直接使用raw sql
 如果以上方法都不能解决你的问题，那么你可以直接使用raw sql，这样可以直接控制sql语句，但是这样会使得代码不够优雅，不推荐使用。
