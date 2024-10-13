@@ -112,13 +112,13 @@ class JmsV3Opt(object):
                 "input_username": "xxxx",
                 "input_secret": "",
                 "connect_method": "db_guide",
+                "is_reusable": True,  # 是否可重复使用
                 "connect_options": {
                     "charset": "default",
                     "disableautohash": False,
                     "resolution": "auto",
                     "backspaceAsCtrlH": False,
                     "appletConnectMethod": "web",
-                    "reusable": False
                 }
             }
             response = requests.post(url, headers=self.headers, data=json.dumps(body))
@@ -140,7 +140,18 @@ if __name__ == '__main__':
     # JmsV3Client.create_database()
 ```
 ## 参考参数说明文档调整过期时间等
-文档: https://docs.jumpserver.org/zh/v3/guide/env/
+文档: https://docs.jumpserver.org/zh/v3/guide/env/    
+示例: 3小时内可重复使用
+```yaml
+            - name: CONNECTION_TOKEN_REUSABLE
+              value: 'true'
+            - name: CONNECTION_TOKEN_EXPIRATION_MAX
+              value: '10800'
+            - name: CONNECTION_TOKEN_EXPIRATION
+              value: '10800'
+```
+### 如何debug token过期    
+调用authentication_connection-token的list接口，查看返回的参数明细
 ## 效果
 通过cmdb获取的jms代理地址连接数据库，可以在jms中查看到sql执行记录，同时注册注销连接信息等，大大提高了数据库的安全性。   
 最后提醒，这是v3版本专有的功能，v4要收费啦!!!
