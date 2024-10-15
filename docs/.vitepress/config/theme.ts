@@ -79,6 +79,6 @@ export const themeConfig: DefaultTheme.Config = {
     // icpRecordCode: '津ICP备2022005864号-2', // ICP备案号
     // publicSecurityRecordCode: '津公网安备12011202000677号', // 联网备案号
     // copyright: `Copyright © 2019-${new Date().getFullYear()} Charles7c` // 版权信息
-    text: "每天都做点什么，或许突然就不一样了"
+    text: "总是播种, 常常期待, 有时收获"
   }
 }
