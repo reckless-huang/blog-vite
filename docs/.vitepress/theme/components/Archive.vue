@@ -133,7 +133,11 @@
     // 文章数据归档处理
     // 1.对文章数据进行降序排序
     console.log($articleData)
-    $articleData.sort((a, b) => b.date.localeCompare(a.date));
+    $articleData.sort((a, b) => {
+      console.log(a.date)
+      console.log(b)
+      return b.date.localeCompare(a.date)
+    });
     // 2.按年、月进行归档
     for (let i = 0; i < $articleData.length; i++) {
       const article = $articleData[i];
