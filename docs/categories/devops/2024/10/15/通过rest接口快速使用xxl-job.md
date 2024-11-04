@@ -65,5 +65,95 @@ class XxlOpt(object):
 
 xxl = XxlOpt()
 ```
+## next
+最近我们小组内的同学调研了另一款工具[Cronicle](https://github.com/jhuckaby/Cronicle),使用nodejs开发，功能场景上更契合运维开发，这里做个补充。    
+可以用这个yaml部署看看效果
+```yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations: {}
+  labels:
+    app: cronicle
+  name: cronicle
+  namespace: cronicle
+  resourceVersion: '443501383'
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: cronicle
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: '2024-11-04T11:50:58+08:00'
+      creationTimestamp: null
+      labels:
+        app: cronicle
+    spec:
+      containers:
+        - image: 'soulteary/cronicle:0.9.59'
+          imagePullPolicy: IfNotPresent
+          name: cronicle
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /opt/cronicle/data
+              name: data
+              subPath: data
+            - mountPath: /opt/cronicle/logs
+              name: data
+              subPath: logs
+            - mountPath: /opt/cronicle/plugins
+              name: data
+              subPath: plugins
+            - mountPath: /opt/cronicle/conf/config.json
+              name: config
+              subPath: config.json
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: cronicle-data
+        - configMap:
+            defaultMode: 420
+            name: cronicle-config
+          name: config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations: {}
+  labels:
+    app: cronicle
+  name: cronicle
+  namespace: cronicle
+  resourceVersion: '440972554'
+spec:
+  clusterIP: 10.96.114.203
+  ports:
+    - name: '3012'
+      port: 3012
+      protocol: TCP
+      targetPort: 3012
+  selector:
+    app: cronicle
+  sessionAffinity: None
+  type: ClusterIP
+```
 ## 总结
 通过rest调用的话就轻量了不少，同时他的页面还算ok，可以看到任务的执行情况。在运维开发上，往往解决问题的方式有很多种，选择适合自己的就好。
