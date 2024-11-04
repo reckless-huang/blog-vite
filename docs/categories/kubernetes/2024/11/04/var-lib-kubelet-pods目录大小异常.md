@@ -10,7 +10,7 @@ tags:
 # var-lib-kubelet-pods目录大小异常
 最近在k8s集群中发现/var/lib/kubelet/pods目录大小异常，这里记录一下解决过程。
 ## 问题
-磁盘空间增速异常，使用[ncdu](xxxx)逐级查询，发现/var/lib/kubelet/pods目录下有大量的文件，占用了大量磁盘空间。
+磁盘空间增速异常，使用ncdu逐级查询，发现/var/lib/kubelet/pods目录下有大量的文件，占用了大量磁盘空间。
 ### 定位pod
 pods/目录下文件ID对应pod的UUID, 可以查看目录下的containers目录，查看容器信息，大概确认是哪个pod，在我们这里是cilium的pod。   
 ### 分析文件
