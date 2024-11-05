@@ -6,6 +6,7 @@ categories:
 tags:
   - kubernetes
   - var-lib-kubelet-pods
+  - 故障
 ---
 # var-lib-kubelet-pods目录大小异常
 最近在k8s集群中发现/var/lib/kubelet/pods目录大小异常，这里记录一下解决过程。
