@@ -7,6 +7,8 @@ tags:
  - django
  - 审计日志
  - 数据可视化
+ - wsgi
+ - asgi
 ---
 # django审计日志
 ::: tip
@@ -225,5 +227,28 @@ https://github.com/soynatan/django-easy-audit/issues/132
         except Exception:
             return False
 ```
+## 兼容wsgi
+在request_signals.py中，我从scope中获取jwt token，但是wsgi中没有scope，所以需要兼容wsgi，从environ中获取jwt token
+``` python
+    auth_string = None
+    if environ:
+        path = environ["PATH_INFO"]
+        auth_string = environ.get('HTTP_AUTHORIZATION')
+        cookie_string = environ.get('HTTP_COOKIE')
+        remote_ip = environ.get(REMOTE_ADDR_HEADER, None)
+        method = environ['REQUEST_METHOD']
+```
+### wsgi vs asgi
+sgi 是服务器网关接口（Server Gateway Interface）的缩写，是一种 Web 服务器和 Web 应用程序之间的通信协议。
+- WSGI
+多线程并发，不支持websocket
+- ASGI
+单线程协程，支持websocket
+> 相对而言asgi适合短平快的高并发，这样可以协程调度，但是会被长时间的请求阻塞    
+wsgi通过多个线程处理请求，适合长时间的请求，但是会消耗更多的资源，在我们的cmdb中存在比较多的同步长时间请求，所以我们选择wsgi
+### 调试wsgi
+直接使用 gunicorn -b 0.0.0.0:8080 -w 8  搭配print调试
+
+
 ## 总结
 插件的整体思路就是信号量来触发不同的事件，然后记录到数据库中，这样就可以实现审计日志的功能。
