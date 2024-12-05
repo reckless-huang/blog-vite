@@ -1,0 +1,61 @@
+---
+title: k8s故障排查-网络转发
+data: 2024-12-05 19:05:05
+author: yufeng
+categories:
+   - kubernetes
+tags:
+   - kubernetes
+   - ipv4
+---
+# k8s故障排查-网络转发
+最近一段时间我的工作内容偏向运维平台开发多一点，处理集群故障似乎有点生疏了，因此最近的一次故障我主动参与了进来。这里也作了一个简单的记录和复盘:blush
+:
+## 表象分析
+同事反馈最开始因为客户操作将我们的vip绑定了到了服务器A的em2上，导致集群的keepalived异常，使用arp-ping查出问题后，禁用了em2网卡，keepalived
+恢复正常，便没有继续处理了。由于是新客户的集群也没有在使用，所以到也风平浪静，直到测试同学测试时发现业务系统很多报错几乎无法正常工作，这时候检查集群
+发现coredns和metric-server都处在loopback状态，还有很多业务pod也没有正常启动。ok开始分析：   
+### 看日志
+查看coredns和apiserver都有类似错误日志
+```
+E1204 11:07:19.168968       1 reflector.go:178] pkg/mod/k8s.io/client-go@v0.18.3/tools/cache/reflector.go:125: Failed to list *v1.Namespace: Get "https://100.158.0.1:443/api/v1/namespaces?limit=500&resourceVersion=0": dial tcp 100.158.0.1:443: i/o timeout
+```
+初步确定是pod内容无法访问api-server，在主机上测试
+```
+curl -k https://100.158.0.1:443
+```
+是正常访问的，说明是容器内的网络转发异常   
+以上还算正常，但这之后我就开始靠所谓的经验猜问题了，在mtu ipv6 ipatbles上查了一个遍，也没定位到问题
+## 头脑清醒后
+1. 先看组件日志
+果然很容易就发现了问题，如下异常
+```shell
+# docker info
+WARNING: IPv4 forwarding is disabled
+WARNING: bridge-nf-call-iptables is disabled
+WARNING: bridge-nf-call-ip6tables is disabled 
+[root@master192 ~]# tail -fn 10000 /var/log/messages | grep disabled
+Dec  5 10:13:49 master192 dockerd: time="2024-12-05T10:13:49.019171936+08:00" level=warning msg="IPv4 forwarding is disabled. Networking will not work."
+Dec  5 10:13:49 master192 dockerd: time="2024-12-05T10:13:49.083035734+08:00" level=warning msg="IPv4 forwarding is disabled. Networking will not work."
+Dec  5 10:13:50 master192 dockerd: time="2024-12-05T10:13:50.134821305+08:00" level=warning msg="IPv4 forwarding is disabled. Networking will not work."
+Dec  5 10:13:50 master192 dockerd: time="2024-12-05T10:13:50.315765786+08:00" level=warning msg="IPv4 forwarding is disabled. Networking will not work."
+```
+破案了，问题是网络转发被禁用了，检查/etc/sysctl.conf，发现配置丢失了，添加如下配置
+```shell
+echo "net.bridge.bridge-nf-call-iptables=1" >> /etc/sysctl.conf
+
+echo "net.bridge.bridge-nf-call-ip6tables=1" >> /etc/sysctl.conf
+
+sysctl -p
+
+```
+**不要忘记还要重启docker**
+2. 检查环境是否恢复
+3. 检查其他客户环境是否存在相同问题
+发现最近部署的客户都有类似问题，只是还没有暴露出来
+4. 寻找根因
+TODO
+## 复盘
+1. 不要使用经验排查问题，排错就是stepbystep，操之过急偶尔有奇效，但是遇到问题一定要有思路，
+2. 故障处理一定要检查现场是否完全修复，不能处理一半
+
