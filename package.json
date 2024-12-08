@@ -11,28 +11,30 @@
     "preview": "vitepress preview docs"
   },
   "devDependencies": {
-    "@arco-design/web-vue": "^2.53.3",
+    "@arco-design/web-vue": "^2.56.0",
     "@types/blueimp-md5": "^2.18.2",
-    "@types/jquery": "^3.5.29",
+    "@types/jquery": "^3.5.30",
     "markdown-it": "^13.0.2",
     "markdown-it-footnote": "^3.0.3",
     "markdown-it-mathjax3": "^4.3.2",
     "mermaid": "9.3.0",
     "unplugin-vue-components": "^0.25.2",
-    "vite": "^5.0.3",
-    "vitepress": "1.3.2",
+    "vite": "^5.3.5",
+    "vitepress": "^1.5.0",
     "vitepress-plugin-mermaid": "2.0.8",
-    "vue": "^3.3.9"
+    "vue": "^3.4.35"
   },
   "dependencies": {
     "@antv/g2plot": "2.4.31",
-    "axios": "^1.6.2",
+    "axios": "^1.7.3",
     "blueimp-md5": "^2.19.0",
-    "dayjs": "^1.11.10",
+    "dayjs": "^1.11.12",
     "fast-glob": "^3.3.2",
     "gitalk": "^1.8.0",
     "gray-matter": "^4.0.3",
-    "jquery": "^3.7.1"
+    "jquery": "^3.7.1",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
   },
   "pnpm": {
     "overrides": {
