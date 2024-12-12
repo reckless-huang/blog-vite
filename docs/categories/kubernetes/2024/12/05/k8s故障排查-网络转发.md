@@ -1,6 +1,6 @@
 ---
 title: k8s故障排查-网络转发
-data: 2024-12-05 19:05:05
+date: 2024/12/05 19:05:00
 author: yufeng
 categories:
    - kubernetes
