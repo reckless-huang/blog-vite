@@ -1,6 +1,7 @@
 ---
 title: 这个博客是怎么搭建的
 isOriginal: true
+isTop: true
 author: 宇峰
 date: 2024/08/02 22:25
 articleTitle: 这个博客是怎么搭建的
@@ -119,6 +120,21 @@ jobs:
 1. 关闭cloudflare缓存，查看是否是cloudflare缓存导致的问题
 2. 本地清除缓存，查看是否是本地缓存导致的问题
 3. lean.js(优化的js不包含内容所以导致页面内容空) 最终导致了这个问题，但是我没有找到解决办法，只能等待他们修复。
+## 解决缓存问题
+1. 测试来源仓库-同样有问题
+2. 去社区寻找答案没有相关issue-无
+3. 对比请求-发现空白页面请求了lean.js
+4. google-看到了尤大在2020自豪的引入了lean.js
+5. 如何修复这个问题-提issue，同类问题review
+6. 思考lean是如何工作的，分析https://github.com/vuejs/vitepress/blob/main/src/node/plugin.ts，发现主要是通过lean来识别的
+7. 我是运维所以直接nginx梭哈rewrite了
+```
+        
+        location ~* \.lean\.js$ {
+        rewrite ^(.*)\.lean\.js$ $1.js last;
+        }
+```
+测试下问题解决，持续半年的问题解决啦！:lollipop::lollipop::lollipop::lollipop:
 ### 如果想有一个博客，那就现在开始吧，有疑问欢迎留言。
 ### 参考资料（侵删）
 1. [vitepress官方文档](https://vitepress.dev/zh/guide/getting-started)

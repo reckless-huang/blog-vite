@@ -8,6 +8,7 @@ tags:
   - cgroupv2
   - k8s
   - systemd
+  - 故障
 ---
 # 迎接cgroupv2
 ::: tip
